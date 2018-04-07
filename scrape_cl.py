@@ -1,7 +1,6 @@
 from lxml import html
 import requests
 from configargparse import ArgParser
-from shlex import quote
 
 p = ArgParser()
 
@@ -13,8 +12,11 @@ page = requests.get(args.url)
 tree = html.fromstring(page.content)
 
 pubs = tree.xpath('//b/u/text()')
-titles = tree.xpath('//p/a/text()')
+content = tree.xpath('//b/u/text()|//p/a/text()')
 
-for i in pubs:
-	if "PUBLISHER" not in i and "Games - " not in i and "Merchandise" not in i and "Cards - " not in i:
-		print(i)
+for i in range(8,len(content)):
+	# if "PUBLISHER" not in content[i] and "Games - " not in content[i] and "Merchandise" not in content[i] and "Cards - " not in content[i]:
+	if content[i] not in pubs:
+		print(content[i])
+	else:
+		print("\n", content[i], sep='')
